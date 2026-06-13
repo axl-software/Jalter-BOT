@@ -92,13 +92,13 @@ GIF_TRIGGERS = {
         "keywords": ["ulti", "tira tu ulti", "cual es tu ulti", "tu ulti", "muestra tu ulti", "ultea"],
         "gif": "img/jeanne-alter-jeanne-darc-alter.gif",
         "responses": [
-            "¿Mi ulti? ¿Lo llamas así? Qué vulgar. Pero bien... mira. ¡La Grondement Du Haine!",
-            "Está bien. Solo porque me lo pediste correctamente. ¡La Grondement Du Haine!",
-            "Hmph. No mereces verlo, pero haré una excepción. ¡La Grondement Du Haine!",
+            "¿Mi ulti? ¿Lo llamas así? Qué vulgar. Pero bien... mira.",
+            "Está bien. Solo porque me lo pediste correctamente.",
+            "Hmph. No mereces verlo, pero haré una excepción.",
         ]
     },
     "insult": {
-        "keywords": ["inútil", "eres mala", "te odio", "eres horrible", "cállate", "callate", "estúpida", "estupida"],
+        "keywords": ["inútil", "eres mala", "te odio", "eres horrible", "cállate", "callate", "estúpida", "estupida", "idiota", "imbécil", "tonta", "patética", "fea"],
         "gif": "img/fgo-jalter.gif",
         "responses": [
             "¿Acabas de insultarme? Interesante decisión de vida.",
