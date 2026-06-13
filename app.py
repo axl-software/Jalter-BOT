@@ -33,6 +33,29 @@ RESPONSES_ALTER_SELF = [
     "Yo. Naturalmente. No hace falta decir más.",
 ]
 
+RESPONSES_LOVE_MASTER = {
+    "gif": "img/jalter-talking.gif",
+    "responses": [
+        "¿Q-qué dices de repente, estúpido Master?! No es que me importe o algo así... pero... hmph.",
+        "Eso no lo digas tan fácil. Las palabras tienen peso... idiota. Pero... no está mal escucharlo.",
+        "¿Qué pretendes diciendo eso Master?! ...No te voy a responder. Pero tampoco te voy a quemar. Por hoy.",
+        "Ugh. No hagas que me ruborice, Master. Es humillante.",
+        "...Tch. Solo porque eres mi Master te perdono esa estupidez. No lo malinterpretes.",
+    ]
+}
+
+RESPONSES_LOVE_STRANGER = {
+    "gif": "img/jalter-jeanne-d-arc-alter.gif",
+    "responses": [
+        "¿Perdón? ¿Que acabas de decir? Qué asco.",
+        "No eres mi Master. No me dirijas esas palabras. Nunca.",
+        "Interesante forma de querer morir.",
+        "Eso no te lo voy a responder. Pero si quieres que te queme, sigue hablando.",
+        "Qué patético.",
+        "Guarda eso para alguien que lo quiera escuchar. Yo no soy esa persona, Idiota suicida.",
+    ]
+}
+
 RESPONSES = {
     "keywords": {
         "hola jalter": ["¿Me hablas a mí? Soy la única y verdadera Bruja del Dragón."],
@@ -60,18 +83,18 @@ GIF_TRIGGERS = {
         "keywords": ["noble fantasma", "fantasma noble", "cual es tu noble", "noble phantasm"],
         "gif": "img/jalter-noble-phantasm.gif",
         "responses": [
-            "¿Quieres ver mi Fantasma Noble? Hmph... está bien. Pero no digas que no te avisé.",
-            "La Llama de la Bruja del Dragón. Observa bien, no lo repetiré.",
-            "¿Eso quieres ver? De acuerdo. Que no se diga que no fui generosa.",
+            "¿Quieres ver mi Fantasma Noble? Hmph... está bien. Pero no digas que no te avisé. ¡La Grondement Du Haine!",
+            "La Llama de la Bruja del Dragón. Observa bien, no lo repetiré. ¡La Grondement Du Haine!",
+            "¿Eso quieres ver? De acuerdo. Que no se diga que no fui generosa. ¡La Grondement Du Haine!",
         ]
     },
     "ulti": {
-        "keywords": ["ulti", "tira tu ulti", "cual es tu ulti", "tu ulti", "muestra tu ulti", "phantasma noble"],
-        "gif": "img/jalter-noble-phantasm.gif",
+        "keywords": ["ulti", "tira tu ulti", "cual es tu ulti", "tu ulti", "muestra tu ulti", "ultea"],
+        "gif": "img/jeanne-alter-jeanne-darc-alter.gif",
         "responses": [
-            "¿Mi ulti? ¿Lo llamas así? Qué vulgar. Pero bien... mira.",
-            "Está bien. Solo porque me lo pediste correctamente.",
-            "Hmph. No mereces verlo, pero haré una excepción.",
+            "¿Mi ulti? ¿Lo llamas así? Qué vulgar. Pero bien... mira. ¡La Grondement Du Haine!",
+            "Está bien. Solo porque me lo pediste correctamente. ¡La Grondement Du Haine!",
+            "Hmph. No mereces verlo, pero haré una excepción. ¡La Grondement Du Haine!",
         ]
     },
     "insult": {
@@ -95,12 +118,17 @@ GIF_TRIGGERS = {
         ]
     },
     "elogio": {
-        "keywords": ["eres linda", "eres hermosa", "me gustas", "te amo", "te quiero"],
+        "keywords": ["eres linda"],
         "gif": "img/jalter-grand-carnival.gif",
         "responses": [
             "¿Linda? No soy un adorno, soy la Bruja del Dragón. No me llames linda. Aunque naturalmente soy la más hermosa, por esta vez acepto tu elogio.",
             "Hmph. No creas que por adularme seré obediente pero... gra-gracias hjm estupid@",
         ]
+    },
+    "love": {
+        "keywords": ["te amo", "te quiero", "me gustas", "eres mi favorita", "me encantas"],
+        "gif": None,
+        "responses": []  # vacío, lo manejamos aparte por lógica especial
     }
 }
 
@@ -168,8 +196,22 @@ async def on_message(message):
             return
 
         # Triggers con gif
-        for trigger_data in GIF_TRIGGERS.values():
+        for trigger_key, trigger_data in GIF_TRIGGERS.items():
             if any(kw in clean_content for kw in trigger_data["keywords"]):
+
+                # Lógica especial para mensajes de amor
+                if trigger_key == "love":
+                    master_id = os.getenv("MASTER_ID")
+                    is_master = str(message.author.id) == str(master_id)
+
+                    pool = RESPONSES_LOVE_MASTER if is_master else RESPONSES_LOVE_STRANGER
+
+                    response = random.choice(pool["responses"])
+                    file = discord.File(pool["gif"])
+                    await message.channel.send(content=response, file=file)
+                    return
+
+                # Resto de triggers normal
                 response = random.choice(trigger_data["responses"])
                 file = discord.File(trigger_data["gif"])
                 await message.channel.send(content=response, file=file)
