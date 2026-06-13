@@ -149,7 +149,7 @@ async def on_message(message):
 
     # ── 2. Otros bots ─────────────────────────────────────
     if message.author.bot:
-        if random.random() < 0.1:
+        if random.random() < 0.01:
             await message.channel.send(random.choice(RESPONSES["other_bot"]))
         return
 
